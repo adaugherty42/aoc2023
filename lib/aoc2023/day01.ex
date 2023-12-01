@@ -59,7 +59,8 @@ defmodule Aoc2023.Day01 do
     line
     |> String.replace(~r/[^\d]/, "")
     |> String.codepoints()
+    |> then(&[List.first(&1) | [List.last(&1)]])
     |> Enum.map(&elem(Integer.parse(&1), 0))
-    |> then(&(List.first(&1) * 10 + List.last(&1)))
+    |> then(fn [h | [t]] -> h * 10 + t end)
   end
 end
