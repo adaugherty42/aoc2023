@@ -1,15 +1,15 @@
 defmodule Aoc2023.Day01 do
   @input_file_path "input/day01.txt"
 
-  def part_one() do
-    @input_file_path
+  def part_one(input_file \\ @input_file_path) do
+    input_file
     |> stream_and_trim_input()
     |> Stream.map(&find_and_count_digits/1)
     |> Enum.reduce(0, &(&2 + &1))
   end
 
-  def part_two() do
-    @input_file_path
+  def part_two(input_file \\ @input_file_path) do
+    input_file
     |> stream_and_trim_input()
     |> Stream.map(&replace_string_numbers(&1, ""))
     |> Stream.map(&find_and_count_digits/1)
@@ -63,6 +63,3 @@ defmodule Aoc2023.Day01 do
     |> then(&(List.first(&1) * 10 + List.last(&1)))
   end
 end
-
-IO.puts("Part 1: #{Aoc2023.Day01.part_one()}")
-IO.puts("Part 2: #{Aoc2023.Day01.part_two()}")
