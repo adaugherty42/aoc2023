@@ -1,0 +1,68 @@
+defmodule Aoc2023.Day01 do
+  @input_file_path "input/day01.txt"
+
+  def part_one() do
+    @input_file_path
+    |> stream_and_trim_input()
+    |> Stream.map(&find_and_count_digits/1)
+    |> Enum.reduce(0, &(&2 + &1))
+  end
+
+  def part_two() do
+    @input_file_path
+    |> stream_and_trim_input()
+    |> Stream.map(&replace_string_numbers(&1, ""))
+    |> Stream.map(&find_and_count_digits/1)
+    |> Enum.reduce(0, &(&2 + &1))
+  end
+
+  defp stream_and_trim_input(input) do
+    input
+    |> File.stream!()
+    |> Stream.map(&String.trim/1)
+    |> Stream.reject(&(&1 in [nil, ""]))
+  end
+
+  defp replace_string_numbers("", acc), do: acc
+
+  defp replace_string_numbers(<<"one", rest::binary>>, acc),
+    do: replace_string_numbers("e" <> rest, acc <> "1")
+
+  defp replace_string_numbers(<<"two", rest::binary>>, acc),
+    do: replace_string_numbers("o" <> rest, acc <> "2")
+
+  defp replace_string_numbers(<<"three", rest::binary>>, acc),
+    do: replace_string_numbers("e" <> rest, acc <> "3")
+
+  defp replace_string_numbers(<<"four", rest::binary>>, acc),
+    do: replace_string_numbers(rest, acc <> "4")
+
+  defp replace_string_numbers(<<"five", rest::binary>>, acc),
+    do: replace_string_numbers("e" <> rest, acc <> "5")
+
+  defp replace_string_numbers(<<"six", rest::binary>>, acc),
+    do: replace_string_numbers(rest, acc <> "6")
+
+  defp replace_string_numbers(<<"seven", rest::binary>>, acc),
+    do: replace_string_numbers(rest, acc <> "7")
+
+  defp replace_string_numbers(<<"eight", rest::binary>>, acc),
+    do: replace_string_numbers("t" <> rest, acc <> "8")
+
+  defp replace_string_numbers(<<"nine", rest::binary>>, acc),
+    do: replace_string_numbers("e" <> rest, acc <> "9")
+
+  defp replace_string_numbers(<<head::binary-size(1), rest::binary>>, acc),
+    do: replace_string_numbers(rest, acc <> head)
+
+  def find_and_count_digits(line) do
+    line
+    |> String.replace(~r/[^\d]/, "")
+    |> String.codepoints()
+    |> Enum.map(&elem(Integer.parse(&1), 0))
+    |> then(&(List.first(&1) * 10 + List.last(&1)))
+  end
+end
+
+IO.puts("Part 1: #{Aoc2023.Day01.part_one()}")
+IO.puts("Part 2: #{Aoc2023.Day01.part_two()}")
